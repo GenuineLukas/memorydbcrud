@@ -3,10 +3,10 @@ package com.example.demo.user.controller;
 import com.example.demo.user.model.UserEntity;
 import com.example.demo.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -27,23 +27,43 @@ public class UserApiController {
         return userService.findAll();
     }
 
-    @DeleteMapping(path= "id/{id}")
+    // delete
+    @DeleteMapping("/id/{id}")
     public void delete(
             @PathVariable Long id
     ){
-        userService.remove(id);
+        //userService.delete(id);
     }
 
-    @GetMapping(path="id/{id}")
-    public UserEntity findByID(@PathVariable Long id){
+
+    // findby id -> path variable
+    @GetMapping("/id/{id}")
+    public UserEntity findOne(
+            @PathVariable Long id
+    ){
         var response = userService.findById(id);
         return response.get();
     }
 
-    @GetMapping(path = "/score")
+    @GetMapping("/score")
     public List<UserEntity> filterScore(
             @RequestParam int score
     ){
         return userService.filterScore(score);
+    }
+
+    @GetMapping("/score/less-or-equal")
+    public List<UserEntity> filterLessOrEqual(
+        @RequestParam int score
+    ){
+        return userService.filterScoreLessOrEqual(score);
+    }
+
+    @GetMapping("/min_max")
+    public List<UserEntity> filterScore(
+            @RequestParam int min,
+            @RequestParam int max
+    ){
+        return userService.filterScore(min, max);
     }
 }
